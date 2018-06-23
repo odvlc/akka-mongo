@@ -2,7 +2,6 @@ package akkamongo;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.actor.DeadLetterActorRef;
 import akka.actor.Props;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
@@ -25,19 +24,18 @@ import static akka.japi.Util.classTag;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        // Connect to MongoDB instance running on localhost
-        MongoClient mongoClient = new MongoClient();
-        MongoDatabase database = mongoClient.getDatabase("db");
+        try (MongoClient mongoClient = new MongoClient()) {
+            // Connect to MongoDB instance running on localhost
+            MongoDatabase database = mongoClient.getDatabase("db");
 
-        populateData(database);
-        queryDataByActors(database);
-
-        mongoClient.close();
+            populateData(database);
+            queryDataByActors(database);
+        }
     }
 
     private static void populateData(MongoDatabase database) {
         // Access collection
-        MongoCollection<Document> collection = database.getCollection("random-people2");
+        MongoCollection<Document> collection = database.getCollection(Constants.COLLECTION_NAME);
 
         // Insert random data
         List<Document> documents = new ArrayList<>();
@@ -53,7 +51,7 @@ public class Main {
         collection.insertMany(documents);
 
         // Query
-        collection = database.getCollection("random-people2");
+        collection = database.getCollection(Constants.COLLECTION_NAME);
         List<Document> results = collection.find().into(new ArrayList<>());
 
         System.out.println(results.size());
@@ -66,7 +64,7 @@ public class Main {
         ActorRef starterActor = actorSystem.actorOf(Props.create(StarterActor.class, database), "starter-actor");
         ActorRef stopperActor = actorSystem.actorOf(Props.create(StopperActor.class), "stopper-actor");
 
-        starterActor.tell(new Messages.StartSystem(), DeadLetterActorRef.noSender());
+        starterActor.tell(new Messages.StartSystem(), ActorRef.noSender());
 
         //wait for some time before reading result
         Thread.currentThread().sleep(1000 * 10);

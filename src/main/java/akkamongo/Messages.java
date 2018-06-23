@@ -32,13 +32,13 @@ public class Messages {
     }
 
     public static class OneResult {
-        Map result;
+        Map<String, Object> result;
 
-        public OneResult(Map result) {
+        public OneResult(Map<String, Object> result) {
             this.result = result;
         }
 
-        public Map getResult() {
+        public Map<String, Object> getResult() {
             return result;
         }
     }

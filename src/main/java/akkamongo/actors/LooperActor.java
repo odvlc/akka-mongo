@@ -2,6 +2,7 @@ package akkamongo.actors;
 
 import akka.actor.AbstractLoggingActor;
 import akka.actor.ActorSelection;
+import akkamongo.Constants;
 import akkamongo.Messages;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -43,8 +44,7 @@ public class LooperActor extends AbstractLoggingActor {
     }
 
     private Document getOne() {
-        MongoCollection<Document> collection = database.getCollection("random-people2");
-        Document document = collection.findOneAndDelete(Filters.eq("marker", "marker"));
-        return document;
+        MongoCollection<Document> collection = database.getCollection(Constants.COLLECTION_NAME);
+        return collection.findOneAndDelete(Filters.eq("marker", "marker"));
     }
 }
