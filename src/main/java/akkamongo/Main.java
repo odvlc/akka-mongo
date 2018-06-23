@@ -44,16 +44,15 @@ public class Main {
                     .append("age", 20 + i % 10)
                     .append("height", 100 + i % 50)
                     .append("grade", i % 5)
-                    .append("marker", "marker")//trick to get all one by one
+                    .append("marker", "marker")//trick to get all one by one using filter
                     .append("gender", i % 3 == 0 ? "Male" : "Female"));
         }
 
         collection.insertMany(documents);
 
-        // Query
+        // Query the result of operation for debugging. Can be removed.
         collection = database.getCollection(Constants.COLLECTION_NAME);
         List<Document> results = collection.find().into(new ArrayList<>());
-
         System.out.println(results.size());
     }
 

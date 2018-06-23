@@ -9,8 +9,8 @@ public class StopperActor extends AbstractLoggingActor {
     public Receive createReceive() {
 
         return receiveBuilder()
-                .match(Messages.StopSystem.class, s -> {
-                    log().info("stopped");
+                .match(Messages.StopSystem.class, stopSystem -> {
+                    log().info("stopping system");
                     ActorSelection selection = getContext().actorSelection("/user/starter-actor/*");
                     selection.tell(new Messages.StopLoop(), getSelf());
                 })

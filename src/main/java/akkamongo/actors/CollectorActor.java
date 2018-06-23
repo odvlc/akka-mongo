@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class CollectorActor extends AbstractLoggingActor {
 
-    List<Map<String, Object>> list = new ArrayList<>();
+    private List<Map<String, Object>> list = new ArrayList<>();
 
     public Receive createReceive() {
         return receiveBuilder()
@@ -19,7 +19,7 @@ public class CollectorActor extends AbstractLoggingActor {
                     list.add(oneResult.getResult());
                 })
                 .match(Messages.PrintResult.class, printResult -> {
-                    log().info("printing");
+                    log().info("printing result");
                     String json = new Gson().toJson(list);
                     sender().tell(new Messages.AllResult(json), self());
                 })

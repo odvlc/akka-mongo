@@ -22,10 +22,12 @@ public class LooperActor extends AbstractLoggingActor {
 
     public Receive createReceive() {
         return receiveBuilder()
-                .match(Messages.StartLoop.class, s -> {
+                .match(Messages.StartLoop.class, startLoop -> {
                     log().info("loop-started");
 
                     Document document = getOne();
+                    //this loop here is not good because it blocks the actor from receiving any other
+                    //message when while loop is running
                     while (document != null) {
                         ActorSelection selection = getContext().actorSelection("/user/collector-actor");
                         Map<String, Object> result = new HashMap<>();
@@ -34,9 +36,8 @@ public class LooperActor extends AbstractLoggingActor {
                         selection.tell(new Messages.OneResult(result), getSelf());
                         document = getOne();
                     }
-
                 })
-                .match(Messages.StopLoop.class, s -> {
+                .match(Messages.StopLoop.class, stopLoop -> {
                     log().info("loop-stopped");
                     getContext().stop(self());
                 })
@@ -45,6 +46,8 @@ public class LooperActor extends AbstractLoggingActor {
 
     private Document getOne() {
         MongoCollection<Document> collection = database.getCollection(Constants.COLLECTION_NAME);
+        //using marker field as a hack to get one record easily
+        //also here deleting the found record, which is good for testing but not in production
         return collection.findOneAndDelete(Filters.eq("marker", "marker"));
     }
 }
