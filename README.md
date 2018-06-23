@@ -7,11 +7,9 @@ Read a MongoDB collection containing say 1000 documents, ( the document can cont
 
 Use separate Akka actors for the following:
 
-BeginLoop
-
-EndLoop
-
-Loop Execution
+* BeginLoop
+* EndLoop
+* Loop Execution
 
 Implement your own collection pool mechanism to manage the connections to the MongoDB.
 
