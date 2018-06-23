@@ -17,6 +17,28 @@ If the loop execution completes successfully, the accumulated output should be r
 
 If the loop execution fails, the accumulated output till that point, a count of how many records have been accumulated, the reason for failure should be returned.
 
+## Implementation
+
+__Main__ class is used to populate local mongo db with test data and create the actor system to read the data from db.
+
+__StarterActor__ is used to start the loop
+
+__StopperActor__ is used to stop the loop
+
+__LooperActor__ is used to read from db
+
+__Messages__ class collects all the message types used in the system. 
+
+__Constants__ provides easy access to change the program constants such as number of documents and number of looper agents. 
+
+
+## Improvements/Todo
+Implement error handling logic
+
+Improve reading asynchronously from db
+
+Move message classes from __Messages__ class to respective Actor classes that use them.
+
 
 ## How to Build and Run
 You can build the application using the following command:

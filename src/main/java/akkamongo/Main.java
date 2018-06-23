@@ -24,8 +24,6 @@ import static akka.japi.Util.classTag;
 
 public class Main {
 
-    private final static int NUMBER_OF_DOCUMENTS = 1000;
-
     public static void main(String[] args) throws Exception {
         // Connect to MongoDB instance running on localhost
         MongoClient mongoClient = new MongoClient();
@@ -38,14 +36,12 @@ public class Main {
     }
 
     private static void populateData(MongoDatabase database) {
-        // Access database
-
         // Access collection
         MongoCollection<Document> collection = database.getCollection("random-people2");
 
         // Insert random data
         List<Document> documents = new ArrayList<>();
-        for (int i = 1; i <= NUMBER_OF_DOCUMENTS; i++) {
+        for (int i = 1; i <= Constants.NUMBER_OF_DOCUMENTS; i++) {
             documents.add(new Document("name", "name-" + i)
                     .append("age", 20 + i % 10)
                     .append("height", 100 + i % 50)
